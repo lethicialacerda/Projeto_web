@@ -2,7 +2,7 @@
 import {clienteService} from "../service/clientes-service.js"
 
 // Função que cria uma nova linha na tabela para exibir informações de um cliente.
-const criaNovaLinha = (nome, email) => {
+const criaNovaLinha = (nome, email, id) => {
    // Cria um novo elemento de linha <tr> para a tabela.
    const linhaNovoCliente = document.createElement('tr')
    
@@ -17,6 +17,8 @@ const criaNovaLinha = (nome, email) => {
          </ul>
       </td>`    
    linhaNovoCliente.innerHTML = conteudo
+   linhaNovoCliente.dataset.id = id
+   console.log(linhaNovoCliente)
    
    // Retorna o elemento da linha criada.
    return linhaNovoCliente
@@ -25,11 +27,23 @@ const criaNovaLinha = (nome, email) => {
 // Seleciona a tabela no documento HTML usando um atributo de dados.
 const tabela = document.querySelector('[data-tabela]')
 
+tabela.addEventListener('click', (evento) => {
+   let ehBotaoDeletar = evento.target.className == 'botao-simples botao-simples--excluir' 
+   if(ehBotaoDeletar) {
+      const linhaCliente = evento.target.closest('[data-id]')
+      let id = linhaCliente.dataset.id
+      clienteService.removeCliente(id)
+      .then(() => {
+         linhaCliente.remove()
+      })
+   }
+})
+
 // Chama a função do serviço de clientes para listar todos os clientes.
 clienteService.listaClientes()
 .then(data => {
    // Para cada cliente retornado, cria e adiciona uma nova linha na tabela.
    data.forEach(element => {
-      tabela.appendChild(criaNovaLinha(element.nome, element.email))
+      tabela.appendChild(criaNovaLinha(element.nome, element.email, element.id))
    })
 })
