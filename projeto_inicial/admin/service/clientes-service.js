@@ -30,28 +30,6 @@ const criarClientes = (nome, email) => {
    })
 }
 
-const criarProduto = (nomeProduto, preco, descricao) => {
-   // Faz uma requisição POST para adicionar um novo cliente no endereço especificado.
-   return fetch(`http://localhost:3000/profile`, {
-      method: 'POST', // Define o método da requisição como POST.
-      headers: {
-         'Content-type' : 'application/json' // Define o tipo de conteúdo enviado como JSON.
-      },
-      // Converte o nome e email fornecidos para formato JSON para serem enviados na requisição.
-      body: JSON.stringify({
-         nomeProduto: nomeProduto,
-         preco: preco,
-         descricao: descricao
-      })
-   })
-   // Depois de receber a resposta da requisição...
-   .then(resposta => {
-      // ... converte essa resposta de formato JSON para um objeto JavaScript.
-      return resposta.json();
-   })
-}
-
-
 const removeCliente = (id) =>{
    return fetch(`http://localhost:3000/profile/${id}`, {
       method: 'DELETE'
